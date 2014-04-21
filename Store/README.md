@@ -1,29 +1,1 @@
-Store API Unity Plugin
-
-Scenario:
-Unity devs can initiate durable in app purchases, and detect if they have been purchased, all through the Unity environment. Purchases can simulated while debugging.
-
-Secondary scenarios:
-  1)	Unity devs can initiate expiring in app purchases, and detect if they have been purchased and when they expire, all through the Unity environment. Purchases can simulated while debugging.
-  2)	Unity devs can initiate consumable in app purchases, and detect how many times they’ve been purchased, all through the Unity environment.
-  3)	Unity devs can easily invoke review my game on the Windows Store, all through the Unity environment. 
-  4)	Unity devs can easily invoke games by this publisher on the Windows Store, all through the Unity environment. 
-
-Feature list – Durable in app purchase
-  1)	Initiate an in app purchase for a product
-  2)	Detect if a product has been purchased
-  3)	Get the price of a product
-  4)	Simulate purchases with test products
-
-Prototypes
-  We’ve proven that we can interact with the Store API but we have some questions to answer regarding using test products for debugging. 
-
-Next prototypes:
-  •	Initiate durable in app purchase
-  •	Simulate product list through UNITY
-
-SWAGs/Costs/Risks
-  1)	Initiate an in app purchase for a product – 2 days
-  2)	Detect if a product has been purchased – 1 days
-  3)	Get the price of a product – 1 days
-  4)	Simulate purchases with test products – 3 days (at risk --- needs more investigation)
+#Store API Unity Plugin##ScenarioUnity devs can initiate durable in app purchases, and detect if they have been purchased, all through the Unity environment. Purchases can simulated while debugging.##Secondary scenarios1. Unity devs can initiate expiring in app purchases, and detect if they have been purchased and when they expire, all through the Unity environment. Purchases can simulated while debugging.2. Unity devs can initiate consumable in app purchases, and detect how many times they’ve been purchased, all through the Unity environment.3. Unity devs can easily invoke review my game on the Windows Store, all through the Unity environment. 4. Unity devs can easily invoke games by this publisher on the Windows Store, all through the Unity environment. ##Feature list – Durable in app purchase1. Initiate an in app purchase for a product2. Detect if a product has been purchased3. Get the price of a product4. Simulate purchases with test products##Prototypes  We’ve proven that we can interact with the Store API but we have some questions to answer regarding using test products for debugging. ##Next prototypes  * Initiate durable in app purchase  * Simulate product list through UNITY##SWAGs/Costs/Risks1. Initiate an in app purchase for a product – 2 days2. Detect if a product has been purchased – 1 days3. Get the price of a product – 1 days4. Simulate purchases with test products – 3 days (at risk --- needs more investigation)
