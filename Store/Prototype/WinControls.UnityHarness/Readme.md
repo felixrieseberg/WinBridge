@@ -1,0 +1,1 @@
+#WinControlsThis is the core plugin code that calls into the Store APIs. The Plugin is built from this solution. Open this up to view or add ore functionality to the plugin.
