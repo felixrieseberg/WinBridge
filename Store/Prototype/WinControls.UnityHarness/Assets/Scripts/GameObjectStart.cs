@@ -3,26 +3,35 @@ using System.Collections;
 using WinControls;
 
 public class GameObjectStart : MonoBehaviour {
-	WinControls.MessageBox.CommandHandlerDelegate purchaseDelegate;
-	WinControls.MessageBox.CommandHandlerDelegate adsDelegate;
+	WinControls.MessageBox.CommandHandlerDelegate yesDelegate;
+	WinControls.MessageBox.CommandHandlerDelegate noDelegate;
 
 	// Use this for initialization
 	void Start () {
-		purchaseDelegate = PurchaseAction;
-		adsDelegate = AdsAction;
+		yesDelegate = YesAction;
+		noDelegate = NoAction;
 
 		var messageBox = new WinControls.MessageBox ();
-		var purchaseButton = new WinControls.MessageBox.Command ("Purchase", purchaseDelegate);
-		var adsButton = new WinControls.MessageBox.Command ("Continue with ads", adsDelegate);
-		messageBox.ShowMessageBox ("Please select an option to continue playing", "Trial expired", purchaseButton, adsButton);
+		var yesButton = new WinControls.MessageBox.Command ("Yes", yesDelegate);
+		var noButton = new WinControls.MessageBox.Command ("No", noDelegate);
+		messageBox.ShowMessageBox ("Test in app purchase with debug?", "Test dialog", yesButton, noButton);
 	}
 
-	void PurchaseAction(object UICommand) {
-		WinControls.Store.PurchaseFullApp ();
+	void YesAction(object UICommand) {
+		//WinControls.Store.PurchaseFullApp (true);
+		//bool isFullAppActive = WinControls.Store.IsFullAppActive(true);
+		WinControls.Store.PurchaseProduct ("bigsword", true);
+		Debug.LogError(WinControls.Store.IsProductActive("bigsword", true));
+		Debug.LogError("no clicked c#");
 	}
 	
-	void AdsAction(object UICommand) {
-		Debug.LogError("Ads clicked c#");
+	void NoAction(object UICommand) {
+		//WinControls.Store.PurchaseFullApp ();
+		//bool isFullAppActive = WinControls.Store.IsFullAppActive();
+		WinControls.Store.PurchaseProduct ("bigsword");
+		Debug.LogError(WinControls.Store.IsProductActive("bigsword"));
+		Debug.LogError("yes clicked c#");
+
 	}
 
 	
