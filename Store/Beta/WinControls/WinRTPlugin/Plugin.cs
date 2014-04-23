@@ -19,14 +19,14 @@ namespace WinControls
 {
     public class MessageBox
     {
-        public delegate void CommandHandlerDelegate(object UICommand);
+        public delegate void ActionDelegate(object UICommand);
 
         public class Command
         {
             public string text;
-            public CommandHandlerDelegate action;
+            public ActionDelegate action;
 
-            public Command(string text, CommandHandlerDelegate action)
+            public Command(string text, ActionDelegate action)
             {
                 this.text = text;
                 this.action = action;
@@ -71,29 +71,31 @@ namespace WinControls
 
     public class Store
     {
-
-        public static void PurchaseFullApp()
+        public enum PurchaseResult
         {
-            PurchaseFullApp(false);
+            PurchaseSuccess,
+            PurchaseCancel,
+            PurchaseError,
+            AlreadyPurchased
         }
-        public static void PurchaseFullApp(bool isDebug)
+
+        public delegate void ActionDelegate(PurchaseResult result);
+
+        public static void PurchaseFullApp(ActionDelegate purchaseCallback)
+        {
+            PurchaseFullApp(purchaseCallback, false);
+        }
+        public static void PurchaseFullApp(ActionDelegate purchaseCallback, bool isDebug)
         {
 #if NETFX_CORE
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    if (isDebug)
-                    {
-                        CurrentAppSimulator.RequestAppPurchaseAsync(false);
-                    }
-                    else
-                    {
-                        CurrentApp.RequestAppPurchaseAsync(false);
-                    }
-                });
+            {
+                PurchaseFullAppAsync(purchaseCallback, isDebug);
+            });
 #endif
         }
 
-        
+
         public static bool IsFullAppActive()
         {
             return IsFullAppActive(false);
@@ -102,7 +104,7 @@ namespace WinControls
 
         public static bool IsFullAppActive(bool isDebug)
         {
-            bool isActive = false; 
+            bool isActive = false;
 #if NETFX_CORE
 
             if (isDebug)
@@ -117,25 +119,18 @@ namespace WinControls
             return isActive;
         }
 
-        public static void PurchaseProduct(string productName)
+        public static void PurchaseProduct(string productName, ActionDelegate callBack)
         {
-            PurchaseProduct(productName, false);
+            PurchaseProduct(productName, callBack, false);
 
         }
 
-        public static void PurchaseProduct(string productName, bool isDebug)
+        public static void PurchaseProduct(string productName, ActionDelegate purchaseCallback, bool isDebug)
         {
 #if NETFX_CORE
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                if (isDebug)
-                {
-                    CurrentAppSimulator.RequestProductPurchaseAsync(productName, false);
-                }
-                else
-                {
-                    CurrentApp.RequestProductPurchaseAsync(productName, false);
-                }
+                PurchaseProductAsync(productName, purchaseCallback, isDebug);
             });
 #endif
         }
@@ -148,7 +143,7 @@ namespace WinControls
 
         public static bool IsProductActive(string productName, bool isDebug)
         {
-            bool isActive = false; 
+            bool isActive = false;
 #if NETFX_CORE
 
             if (isDebug)
@@ -163,5 +158,72 @@ namespace WinControls
             return isActive;
         }
 
+
+#if NETFX_CORE
+        // Internal Windows-only functions
+
+        protected async static void PurchaseFullAppAsync(ActionDelegate purchaseCallback, bool isDebug)
+        {
+            if (!IsFullAppActive(isDebug))
+            {
+                try
+                {
+                    if (isDebug)
+                    {
+
+                        await CurrentAppSimulator.RequestAppPurchaseAsync(false);
+                        PurchaseResult purchaseResult = IsFullAppActive(isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
+                        purchaseCallback(purchaseResult);
+                    }
+                    else
+                    {
+                        await CurrentApp.RequestAppPurchaseAsync(false);
+                        PurchaseResult purchaseResult = IsFullAppActive(isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
+                        purchaseCallback(purchaseResult);
+                    }
+                }
+                catch
+                {
+                    purchaseCallback(PurchaseResult.PurchaseError);
+                }
+            }
+            else
+            {
+                purchaseCallback(PurchaseResult.AlreadyPurchased);
+            }
+      
+        }
+        protected async static void PurchaseProductAsync(string productName, ActionDelegate purchaseCallback, bool isDebug)
+        {
+            if (!IsProductActive(productName, isDebug))
+            {
+                try
+                {
+                    if (isDebug)
+                    {
+
+                        await CurrentAppSimulator.RequestProductPurchaseAsync(productName, false);
+                        PurchaseResult purchaseResult = IsProductActive(productName, isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
+                        purchaseCallback(purchaseResult);
+                    }
+                    else
+                    {
+                        await CurrentApp.RequestProductPurchaseAsync(productName, false);
+                        PurchaseResult purchaseResult = IsProductActive(productName, isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
+                        purchaseCallback(purchaseResult);
+                    }
+                }
+                catch
+                {
+                    purchaseCallback(PurchaseResult.PurchaseError);
+                }
+            }
+            else
+            {
+                purchaseCallback(PurchaseResult.AlreadyPurchased);
+            }
+        }
+
+#endif
     }
 }

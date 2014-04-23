@@ -3,35 +3,35 @@ using System.Collections;
 using WinControls;
 
 public class GameObjectStart : MonoBehaviour {
-	WinControls.MessageBox.CommandHandlerDelegate yesDelegate;
-	WinControls.MessageBox.CommandHandlerDelegate noDelegate;
+
 
 	// Use this for initialization
 	void Start () {
-		yesDelegate = YesAction;
-		noDelegate = NoAction;
-
 		var messageBox = new WinControls.MessageBox ();
-		var yesButton = new WinControls.MessageBox.Command ("Yes", yesDelegate);
-		var noButton = new WinControls.MessageBox.Command ("No", noDelegate);
+		var yesButton = new WinControls.MessageBox.Command ("Yes", YesAction);
+		var noButton = new WinControls.MessageBox.Command ("No", NoAction);
 		messageBox.ShowMessageBox ("Test in app purchase with debug?", "Test dialog", yesButton, noButton);
 	}
 
 	void YesAction(object UICommand) {
-		//WinControls.Store.PurchaseFullApp (true);
-		//bool isFullAppActive = WinControls.Store.IsFullAppActive(true);
-		WinControls.Store.PurchaseProduct ("bigsword", true);
-		Debug.LogError(WinControls.Store.IsProductActive("bigsword", true));
-		Debug.LogError("no clicked c#");
+		Debug.LogError("Yes button clicked");
+		WinControls.Store.PurchaseFullApp (handlePurchase, true);
 	}
 	
 	void NoAction(object UICommand) {
-		//WinControls.Store.PurchaseFullApp ();
-		//bool isFullAppActive = WinControls.Store.IsFullAppActive();
-		WinControls.Store.PurchaseProduct ("bigsword");
-		Debug.LogError(WinControls.Store.IsProductActive("bigsword"));
-		Debug.LogError("yes clicked c#");
+		// **** Sample snips ***//
+		//
+		//bool isFullAppActive = WinControls.Store.IsFullAppActive(true);
+		//bool isProductActive = WinControls.Store.IsProductActive("bigsword");
+		//WinControls.Store.PurchaseProduct ("bigsword", handlePurchase);
 
+		Debug.LogError("No button clicked");
+		WinControls.Store.PurchaseFullApp (handlePurchase);
+
+	}
+
+	void handlePurchase(Store.PurchaseResult result) {
+		Debug.LogError ("Purchase result " + result);
 	}
 
 	
