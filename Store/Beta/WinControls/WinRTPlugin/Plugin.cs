@@ -93,5 +93,75 @@ namespace WinControls
 #endif
         }
 
+        
+        public static bool IsFullAppActive()
+        {
+            return IsFullAppActive(false);
+
+        }
+
+        public static bool IsFullAppActive(bool isDebug)
+        {
+            bool isActive = false; 
+#if NETFX_CORE
+
+            if (isDebug)
+            {
+                isActive = CurrentAppSimulator.LicenseInformation.IsActive;
+            }
+            else
+            {
+                isActive = CurrentApp.LicenseInformation.IsActive;
+            }
+#endif
+            return isActive;
+        }
+
+        public static void PurchaseProduct(string productName)
+        {
+            PurchaseProduct(productName, false);
+
+        }
+
+        public static void PurchaseProduct(string productName, bool isDebug)
+        {
+#if NETFX_CORE
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                if (isDebug)
+                {
+                    CurrentAppSimulator.RequestProductPurchaseAsync(productName, false);
+                }
+                else
+                {
+                    CurrentApp.RequestProductPurchaseAsync(productName, false);
+                }
+            });
+#endif
+        }
+
+        public static bool IsProductActive(string productName)
+        {
+            return IsProductActive(productName, false);
+
+        }
+
+        public static bool IsProductActive(string productName, bool isDebug)
+        {
+            bool isActive = false; 
+#if NETFX_CORE
+
+            if (isDebug)
+            {
+                isActive = CurrentAppSimulator.LicenseInformation.ProductLicenses[productName].IsActive;
+            }
+            else
+            {
+                isActive = CurrentApp.LicenseInformation.ProductLicenses[productName].IsActive;
+            }
+#endif
+            return isActive;
+        }
+
     }
 }
