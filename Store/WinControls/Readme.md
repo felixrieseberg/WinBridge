@@ -1,0 +1,1 @@
+#WinControls.UnityHarnessThis is the all up unity test game, that has the plugin added along with some test script code to invoke the plugin. To try this out, just export, open the .unity file, and build and run the game for Windows 8.
