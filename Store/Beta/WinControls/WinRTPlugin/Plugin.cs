@@ -9,6 +9,8 @@ using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Store;
+using Windows.Storage;
+using Windows.Storage.Streams;
 #endif
 
 #if WINDOWS_PHONE
@@ -95,7 +97,6 @@ namespace WinControls
 #endif
         }
 
-
         public static bool IsFullAppActive()
         {
             return IsFullAppActive(false);
@@ -158,9 +159,33 @@ namespace WinControls
             return isActive;
         }
 
+        public static void EnableWindowsStoreProxy(string windowsStoreProxy, bool isDebug)
+        {
+#if NETFX_CORE
+            if (isDebug) 
+            {
+                WriteWindowsStoreProxyFile(windowsStoreProxy);
+            }
+#endif
+        }
 
 #if NETFX_CORE
         // Internal Windows-only functions
+
+        protected async static void WriteWindowsStoreProxyFile(string windowsStoreProxy)
+        {
+
+            // Get or create the folder, create or replace the destination file
+            StorageFolder destinationFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("WindowsStoreProxy", CreationCollisionOption.OpenIfExists);
+            StorageFile destinationFile = await destinationFolder.CreateFileAsync("WindowsStoreProxy.xml", CreationCollisionOption.OpenIfExists);
+
+            // Write string to file
+            // Note: The wrong encoding will lead to a nasty exception
+            await Windows.Storage.FileIO.WriteTextAsync(destinationFile, windowsStoreProxy, Windows.Storage.Streams.UnicodeEncoding.Utf16LE);
+
+            // Reload CurrentAppSimulator with created WindowsStoreProxy
+            await CurrentAppSimulator.ReloadSimulatorAsync(destinationFile);
+        }
 
         protected async static void PurchaseFullAppAsync(ActionDelegate purchaseCallback, bool isDebug)
         {
