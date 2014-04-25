@@ -73,6 +73,22 @@ namespace WinControls
 
     public class Store
     {
+        public class FullAppInfo
+        {
+            public string Name;
+            public string Description;
+            public string Market;
+            public uint AgeRating;
+            public string Price;
+        }
+
+        public class ProductInfo
+        {
+            public string Name;
+            public string Id;
+            public string Price;
+        }
+
         public enum PurchaseResult
         {
             PurchaseSuccess,
@@ -81,13 +97,15 @@ namespace WinControls
             AlreadyPurchased
         }
 
-        public delegate void ActionDelegate(PurchaseResult result);
+        public delegate void PurchaseResultHandler(PurchaseResult result);
+        public delegate void FullAppInfoHandler(FullAppInfo result);
+        public delegate void ProductInfoHandler(ProductInfo result);
 
-        public static void PurchaseFullApp(ActionDelegate purchaseCallback)
+        public static void PurchaseFullApp(PurchaseResultHandler purchaseCallback)
         {
             PurchaseFullApp(purchaseCallback, false);
         }
-        public static void PurchaseFullApp(ActionDelegate purchaseCallback, bool isDebug)
+        public static void PurchaseFullApp(PurchaseResultHandler purchaseCallback, bool isDebug)
         {
 #if NETFX_CORE
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -120,13 +138,25 @@ namespace WinControls
             return isActive;
         }
 
-        public static void PurchaseProduct(string productName, ActionDelegate callBack)
+        public static void GetFullAppInfo(FullAppInfoHandler fullAppInfoCallback, bool isDebug)
         {
-            PurchaseProduct(productName, callBack, false);
+
+#if NETFX_CORE
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                GetFullAppInfoAsync(fullAppInfoCallback, isDebug);
+            });
+#endif
 
         }
 
-        public static void PurchaseProduct(string productName, ActionDelegate purchaseCallback, bool isDebug)
+        public static void PurchaseProduct(string productName, PurchaseResultHandler purchaseCallback)
+        {
+            PurchaseProduct(productName, purchaseCallback, false);
+
+        }
+
+        public static void PurchaseProduct(string productName, PurchaseResultHandler purchaseCallback, bool isDebug)
         {
 #if NETFX_CORE
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -159,12 +189,24 @@ namespace WinControls
             return isActive;
         }
 
+        public static void GetProductInfo(string productName, ProductInfoHandler productInfoCallback, bool isDebug)
+        {
+
+#if NETFX_CORE
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                GetProductInfoAsync(productName, productInfoCallback, isDebug);
+            });
+#endif
+
+        }
+
         public static void EnableWindowsStoreProxy(string windowsStoreProxy, bool isDebug)
         {
 #if NETFX_CORE
-            if (isDebug) 
+            if (isDebug)
             {
-                WriteWindowsStoreProxyFile(windowsStoreProxy);
+                WriteWindowsStoreProxyFileAsync(windowsStoreProxy);
             }
 #endif
         }
@@ -172,7 +214,7 @@ namespace WinControls
 #if NETFX_CORE
         // Internal Windows-only functions
 
-        protected async static void WriteWindowsStoreProxyFile(string windowsStoreProxy)
+        protected async static void WriteWindowsStoreProxyFileAsync(string windowsStoreProxy)
         {
 
             // Get or create the folder, create or replace the destination file
@@ -187,7 +229,72 @@ namespace WinControls
             await CurrentAppSimulator.ReloadSimulatorAsync(destinationFile);
         }
 
-        protected async static void PurchaseFullAppAsync(ActionDelegate purchaseCallback, bool isDebug)
+        protected async static void GetFullAppInfoAsync(FullAppInfoHandler fullAppInfoCallback, bool isDebug)
+        {
+            if (isDebug)
+            {
+                ListingInformation listing = await CurrentAppSimulator.LoadListingInformationAsync();
+                FullAppInfo appInfo = GetAppInfoFromListing(listing);
+                fullAppInfoCallback(appInfo);
+            }
+            else
+            {
+                ListingInformation listing = await CurrentAppSimulator.LoadListingInformationAsync();
+                FullAppInfo appInfo = GetAppInfoFromListing(listing);
+                fullAppInfoCallback(appInfo);
+
+            }
+        }
+
+        protected async static void GetProductInfoAsync(string productName, ProductInfoHandler productInfoCallback, bool isDebug)
+        {
+            if (isDebug)
+            {
+                ListingInformation listing = await CurrentAppSimulator.LoadListingInformationAsync();
+                ProductListing product = listing.ProductListings[productName];
+                ProductInfo productInfo = GetProductInfoFromProduct(product);
+                productInfoCallback(productInfo);
+            }
+            else
+            {
+                ListingInformation listing = await CurrentAppSimulator.LoadListingInformationAsync();
+                ProductListing product = listing.ProductListings[productName];
+                ProductInfo productInfo = GetProductInfoFromProduct(product);
+                productInfoCallback(productInfo);
+            }
+        }
+
+        protected static FullAppInfo GetAppInfoFromListing(ListingInformation listing)
+        {
+            FullAppInfo appInfo = null;
+
+            if (listing != null)
+            {
+                appInfo = new FullAppInfo();
+                appInfo.Name = listing.Name;
+                appInfo.Description = listing.Description;
+                appInfo.Market = listing.CurrentMarket;
+                appInfo.AgeRating = listing.AgeRating;
+                appInfo.Price = listing.FormattedPrice;
+            }
+            return appInfo;
+        }
+
+        protected static ProductInfo GetProductInfoFromProduct(ProductListing listing)
+        {
+            ProductInfo productInfo = null;
+
+            if (listing != null)
+            {
+                productInfo = new ProductInfo();
+                productInfo.Name = listing.Name;
+                productInfo.Id = listing.ProductId;
+                productInfo.Price = listing.FormattedPrice;
+            }
+            return productInfo;
+        }
+
+        protected async static void PurchaseFullAppAsync(PurchaseResultHandler purchaseCallback, bool isDebug)
         {
             if (!IsFullAppActive(isDebug))
             {
@@ -195,7 +302,6 @@ namespace WinControls
                 {
                     if (isDebug)
                     {
-
                         await CurrentAppSimulator.RequestAppPurchaseAsync(false);
                         PurchaseResult purchaseResult = IsFullAppActive(isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
                         purchaseCallback(purchaseResult);
@@ -216,9 +322,9 @@ namespace WinControls
             {
                 purchaseCallback(PurchaseResult.AlreadyPurchased);
             }
-      
+
         }
-        protected async static void PurchaseProductAsync(string productName, ActionDelegate purchaseCallback, bool isDebug)
+        protected async static void PurchaseProductAsync(string productName, PurchaseResultHandler purchaseCallback, bool isDebug)
         {
             if (!IsProductActive(productName, isDebug))
             {
