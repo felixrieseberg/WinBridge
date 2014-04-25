@@ -8,26 +8,22 @@ public class GameObjectStart : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		var messageBox = new WinControls.MessageBox ();
-		var yesButton = new WinControls.MessageBox.Command ("Yes", YesAction);
-		var noButton = new WinControls.MessageBox.Command ("No", NoAction);
-		messageBox.ShowMessageBox ("Test in app purchase with debug?", "Test dialog", yesButton, noButton);
+		var trialUpgradeButton = new WinControls.MessageBox.Command ("Trial Upgrade", trialUpgrade);
+		var productPurchaseButton = new WinControls.MessageBox.Command ("In app purchase", productPurchase);
+		messageBox.ShowMessageBox ("Which scenario would you like to test?", "Store plugin test", trialUpgradeButton, productPurchaseButton);
+	
+		Debug.LogError("Is full product active? " + WinControls.Store.IsFullAppActive(Debug.isDebugBuild));
+		Debug.LogError("Is 'bigsword' product active? " + WinControls.Store.IsProductActive("bigsword", Debug.isDebugBuild));
 	}
 
-	void YesAction(object UICommand) {
-		Debug.LogError("Yes button clicked");
-		WinControls.Store.PurchaseFullApp (handlePurchase, true);
+	void trialUpgrade(object UICommand) {
+		Debug.LogError("Trial upgrade button clicked");
+		WinControls.Store.PurchaseFullApp (handlePurchase, Debug.isDebugBuild );
 	}
 	
-	void NoAction(object UICommand) {
-		// **** Sample snips ***//
-		//
-		//bool isFullAppActive = WinControls.Store.IsFullAppActive(true);
-		//bool isProductActive = WinControls.Store.IsProductActive("bigsword");
-		//WinControls.Store.PurchaseProduct ("bigsword", handlePurchase);
-
-		Debug.LogError("No button clicked");
-		WinControls.Store.PurchaseFullApp (handlePurchase);
-
+	void productPurchase(object UICommand) {
+		Debug.LogError("In app purchase button clicked");
+		WinControls.Store.PurchaseProduct ("bigsword", handlePurchase, Debug.isDebugBuild );	
 	}
 
 	void handlePurchase(Store.PurchaseResult result) {
