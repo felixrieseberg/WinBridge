@@ -94,6 +94,7 @@ namespace WinControls
         public delegate void PurchaseResultHandler(PurchaseResult result);
         public delegate void FullAppInfoHandler(FullAppInfo result);
         public delegate void ProductInfoHandler(ProductInfo result);
+        public delegate void LicenseChangedHandler();
 
         public static void PurchaseFullApp(PurchaseResultHandler purchaseCallback)
         {
@@ -155,7 +156,6 @@ namespace WinControls
         public static bool IsProductActive(string productName)
         {
             return IsProductActive(productName, false);
-
         }
 
         public static bool IsProductActive(string productName, bool isDebug)
@@ -181,13 +181,22 @@ namespace WinControls
 #endif
         }
 
-        public static void EnableWindowsStoreProxy(string windowsStoreProxy, bool isDebug)
+        public static void EnableDebugWindowsStoreProxy(string windowsStoreProxy)
+        {
+            EnableDebugWindowsStoreProxy(windowsStoreProxy, null);
+        }
+
+        public static void EnableDebugWindowsStoreProxy(string windowsStoreProxy, LicenseChangedHandler licenseChangedHandler)
         {
 #if NETFX_CORE
-            if (isDebug)
+            if (licenseChangedHandler != null)
             {
-                WriteWindowsStoreProxyFileAsync(windowsStoreProxy);
+                LicenseChangedEventHandler licenseChangedEventHandler = new LicenseChangedEventHandler(licenseChangedHandler);
+                CurrentAppSimulator.LicenseInformation.LicenseChanged += licenseChangedEventHandler;
             }
+
+            WriteWindowsStoreProxyFileAsync(windowsStoreProxy);
+
 #endif
         }
 
@@ -311,6 +320,7 @@ namespace WinControls
                     {
                         await CurrentApp.RequestProductPurchaseAsync(productName, false);
                     }
+
                     PurchaseResult purchaseResult = IsProductActive(productName, isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
                     purchaseCallback(purchaseResult);
                 }
