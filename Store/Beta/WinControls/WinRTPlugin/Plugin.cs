@@ -13,10 +13,6 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 #endif
 
-#if WINDOWS_PHONE
-
-#endif
-
 namespace WinControls
 {
     public class MessageBox
@@ -35,17 +31,17 @@ namespace WinControls
             }
         }
 
-        public string ShowMessageBox(string message)
+        public void ShowMessageBox(string message)
         {
-            return ShowMessageBox(message, null, null, null);
+            ShowMessageBox(message, null, null, null);
         }
 
-        public string ShowMessageBox(string message, string title, Command command1)
+        public void ShowMessageBox(string message, string title, Command command1)
         {
-            return ShowMessageBox(message, title, command1, null);
+            ShowMessageBox(message, title, command1, null);
         }
 
-        public string ShowMessageBox(string message, string title, Command command1, Command command2)
+        public void ShowMessageBox(string message, string title, Command command1, Command command2)
         {
 #if NETFX_CORE
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -64,9 +60,6 @@ namespace WinControls
 
                 messageBox.ShowAsync();
             });
-            return "winrt";
-#else
-            return "stub";
 #endif
         }
     }
@@ -97,6 +90,7 @@ namespace WinControls
             AlreadyPurchased
         }
 
+
         public delegate void PurchaseResultHandler(PurchaseResult result);
         public delegate void FullAppInfoHandler(FullAppInfo result);
         public delegate void ProductInfoHandler(ProductInfo result);
@@ -108,10 +102,8 @@ namespace WinControls
         public static void PurchaseFullApp(PurchaseResultHandler purchaseCallback, bool isDebug)
         {
 #if NETFX_CORE
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                PurchaseFullAppAsync(purchaseCallback, isDebug);
-            });
+
+            PurchaseFullAppAsync(purchaseCallback, isDebug);
 #endif
         }
 
@@ -142,10 +134,7 @@ namespace WinControls
         {
 
 #if NETFX_CORE
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                GetFullAppInfoAsync(fullAppInfoCallback, isDebug);
-            });
+            GetFullAppInfoAsync(fullAppInfoCallback, isDebug);
 #endif
 
         }
@@ -159,10 +148,7 @@ namespace WinControls
         public static void PurchaseProduct(string productName, PurchaseResultHandler purchaseCallback, bool isDebug)
         {
 #if NETFX_CORE
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                PurchaseProductAsync(productName, purchaseCallback, isDebug);
-            });
+            PurchaseProductAsync(productName, purchaseCallback, isDebug);
 #endif
         }
 
@@ -176,7 +162,6 @@ namespace WinControls
         {
             bool isActive = false;
 #if NETFX_CORE
-
             if (isDebug)
             {
                 isActive = CurrentAppSimulator.LicenseInformation.ProductLicenses[productName].IsActive;
@@ -191,14 +176,9 @@ namespace WinControls
 
         public static void GetProductInfo(string productName, ProductInfoHandler productInfoCallback, bool isDebug)
         {
-
 #if NETFX_CORE
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                GetProductInfoAsync(productName, productInfoCallback, isDebug);
-            });
+            GetProductInfoAsync(productName, productInfoCallback, isDebug);
 #endif
-
         }
 
         public static void EnableWindowsStoreProxy(string windowsStoreProxy, bool isDebug)
@@ -216,7 +196,6 @@ namespace WinControls
 
         protected async static void WriteWindowsStoreProxyFileAsync(string windowsStoreProxy)
         {
-
             // Get or create the folder, create or replace the destination file
             StorageFolder destinationFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("WindowsStoreProxy", CreationCollisionOption.OpenIfExists);
             StorageFile destinationFile = await destinationFolder.CreateFileAsync("WindowsStoreProxy.xml", CreationCollisionOption.OpenIfExists);
@@ -231,37 +210,33 @@ namespace WinControls
 
         protected async static void GetFullAppInfoAsync(FullAppInfoHandler fullAppInfoCallback, bool isDebug)
         {
+            ListingInformation listing;
             if (isDebug)
             {
-                ListingInformation listing = await CurrentAppSimulator.LoadListingInformationAsync();
-                FullAppInfo appInfo = GetAppInfoFromListing(listing);
-                fullAppInfoCallback(appInfo);
+                listing = await CurrentAppSimulator.LoadListingInformationAsync();
             }
             else
             {
-                ListingInformation listing = await CurrentAppSimulator.LoadListingInformationAsync();
-                FullAppInfo appInfo = GetAppInfoFromListing(listing);
-                fullAppInfoCallback(appInfo);
-
+                listing = await CurrentAppSimulator.LoadListingInformationAsync();
             }
+            FullAppInfo appInfo = GetAppInfoFromListing(listing);
+            fullAppInfoCallback(appInfo);
         }
 
         protected async static void GetProductInfoAsync(string productName, ProductInfoHandler productInfoCallback, bool isDebug)
         {
+            ListingInformation listing;
             if (isDebug)
             {
-                ListingInformation listing = await CurrentAppSimulator.LoadListingInformationAsync();
-                ProductListing product = listing.ProductListings[productName];
-                ProductInfo productInfo = GetProductInfoFromProduct(product);
-                productInfoCallback(productInfo);
+                listing = await CurrentAppSimulator.LoadListingInformationAsync();
             }
             else
             {
-                ListingInformation listing = await CurrentAppSimulator.LoadListingInformationAsync();
-                ProductListing product = listing.ProductListings[productName];
-                ProductInfo productInfo = GetProductInfoFromProduct(product);
-                productInfoCallback(productInfo);
+                listing = await CurrentAppSimulator.LoadListingInformationAsync();
             }
+            ProductListing product = listing.ProductListings[productName];
+            ProductInfo productInfo = GetProductInfoFromProduct(product);
+            productInfoCallback(productInfo);
         }
 
         protected static FullAppInfo GetAppInfoFromListing(ListingInformation listing)
@@ -303,15 +278,13 @@ namespace WinControls
                     if (isDebug)
                     {
                         await CurrentAppSimulator.RequestAppPurchaseAsync(false);
-                        PurchaseResult purchaseResult = IsFullAppActive(isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
-                        purchaseCallback(purchaseResult);
                     }
                     else
                     {
                         await CurrentApp.RequestAppPurchaseAsync(false);
-                        PurchaseResult purchaseResult = IsFullAppActive(isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
-                        purchaseCallback(purchaseResult);
                     }
+                    PurchaseResult purchaseResult = IsFullAppActive(isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
+                    purchaseCallback(purchaseResult);
                 }
                 catch
                 {
@@ -332,17 +305,14 @@ namespace WinControls
                 {
                     if (isDebug)
                     {
-
                         await CurrentAppSimulator.RequestProductPurchaseAsync(productName, false);
-                        PurchaseResult purchaseResult = IsProductActive(productName, isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
-                        purchaseCallback(purchaseResult);
                     }
                     else
                     {
                         await CurrentApp.RequestProductPurchaseAsync(productName, false);
-                        PurchaseResult purchaseResult = IsProductActive(productName, isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
-                        purchaseCallback(purchaseResult);
                     }
+                    PurchaseResult purchaseResult = IsProductActive(productName, isDebug) ? PurchaseResult.PurchaseSuccess : PurchaseResult.PurchaseCancel;
+                    purchaseCallback(purchaseResult);
                 }
                 catch
                 {
