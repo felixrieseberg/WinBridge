@@ -11,7 +11,7 @@ public class GameObjectStart : MonoBehaviour {
 		messageBox.ShowMessageBox ("Which scenario would you like to test?", "Store plugin test", trialUpgradeButton, productPurchaseButton);
 	
 		// Initialize the Store proxy on debug builds
-		Store.EnableDebugWindowsStoreProxy("<?xml version=\"1.0\" encoding=\"utf-16\" ?><CurrentApp><ListingInformation><App><AppId>2B14D306-D8F8-4066-A45B-0FB3464C67F2</AppId><LinkUri>http://apps.microsoft.com/webpdp/app/2B14D306-D8F8-4066-A45B-0FB3464C67F2</LinkUri><CurrentMarket>en-US</CurrentMarket><AgeRating>3</AgeRating><MarketData xml:lang=\"en-us\" ><Name>WinControls Test app</Name><Description>Application Link</Description><Price>4.99</Price><CurrencySymbol>$</CurrencySymbol><CurrencyCode>USD</CurrencyCode></MarketData></App><Product ProductId=\"bigsword\" ><MarketData xml:lang=\"en-us\" ><Name>Really big sword</Name><Price>50.99</Price><CurrencySymbol>$</CurrencySymbol><CurrencyCode>USD</CurrencyCode></MarketData></Product></ListingInformation><LicenseInformation><App><IsActive>false</IsActive><IsTrial>true</IsTrial></App><Product ProductId=\"bigsword\" ><IsActive>false</IsActive></Product></LicenseInformation></CurrentApp>", handleLicenseChanged);
+		Store.EnableDebugWindowsStoreProxy("<?xml version=\"1.0\" encoding=\"utf-16\" ?><CurrentApp><ListingInformation><App><AppId>2B14D306-D8F8-4066-A45B-0FB3464C67F2</AppId><LinkUri>http://apps.microsoft.com/webpdp/app/2B14D306-D8F8-4066-A45B-0FB3464C67F2</LinkUri><CurrentMarket>en-US</CurrentMarket><AgeRating>3</AgeRating><MarketData xml:lang=\"en-us\" ><Name>WinControls Test app</Name><Description>Application Link</Description><Price>4.99</Price><CurrencySymbol>$</CurrencySymbol><CurrencyCode>USD</CurrencyCode></MarketData></App><Product ProductId=\"bigsword\" ><MarketData xml:lang=\"en-us\" ><Name>Really big sword</Name><Price>50.99</Price><CurrencySymbol>$</CurrencySymbol><CurrencyCode>USD</CurrencyCode></MarketData></Product></ListingInformation><LicenseInformation><App><IsActive>true</IsActive><IsTrial>false</IsTrial></App><Product ProductId=\"bigsword\" ><IsActive>false</IsActive></Product></LicenseInformation></CurrentApp>", handleLicenseChanged);
 	}
 
 	void trialUpgrade(object UICommand) {
@@ -21,18 +21,15 @@ public class GameObjectStart : MonoBehaviour {
 	
 	void productPurchase(object UICommand) {
 		// Note: Full app must be active for in app product purchase to succeed
+		// If there is a trial, it must be upgraded first
 		Debug.LogError("In app purchase button clicked");
-		Store.PurchaseFullApp (initiateProductPurchase, Debug.isDebugBuild );
+		Store.PurchaseProduct ("bigsword", handlePurchase, Debug.isDebugBuild );	
 	}
 
 	void handleLicenseChanged() {
 		Debug.LogError ("License changed");
 		Store.GetFullAppInfo (handleAppInfo, Debug.isDebugBuild);
 		Store.GetProductInfo ("bigsword", handleProductInfo, Debug.isDebugBuild);
-	}
-	
-	void initiateProductPurchase(Store.PurchaseResult result) {
-		Store.PurchaseProduct ("bigsword", handlePurchase, Debug.isDebugBuild );	
 	}
 
 	void handlePurchase(Store.PurchaseResult result) {
