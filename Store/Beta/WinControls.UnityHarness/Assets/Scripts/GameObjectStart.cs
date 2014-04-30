@@ -11,7 +11,24 @@ public class GameObjectStart : MonoBehaviour {
 		messageBox.ShowMessageBox ("Which scenario would you like to test?", "Store plugin test", trialUpgradeButton, productPurchaseButton);
 	
 		// Initialize the Store proxy on debug builds
-		Store.EnableDebugWindowsStoreProxy("<?xml version=\"1.0\" encoding=\"utf-16\" ?><CurrentApp><ListingInformation><App><AppId>2B14D306-D8F8-4066-A45B-0FB3464C67F2</AppId><LinkUri>http://apps.microsoft.com/webpdp/app/2B14D306-D8F8-4066-A45B-0FB3464C67F2</LinkUri><CurrentMarket>en-US</CurrentMarket><AgeRating>3</AgeRating><MarketData xml:lang=\"en-us\" ><Name>WinControls Test app</Name><Description>Application Link</Description><Price>4.99</Price><CurrencySymbol>$</CurrencySymbol><CurrencyCode>USD</CurrencyCode></MarketData></App><Product ProductId=\"bigsword\" ><MarketData xml:lang=\"en-us\" ><Name>Really big sword</Name><Price>50.99</Price><CurrencySymbol>$</CurrencySymbol><CurrencyCode>USD</CurrencyCode></MarketData></Product></ListingInformation><LicenseInformation><App><IsActive>true</IsActive><IsTrial>false</IsTrial></App><Product ProductId=\"bigsword\" ><IsActive>false</IsActive></Product></LicenseInformation></CurrentApp>", handleLicenseChanged);
+		Store.TestApp testapp = new Store.TestApp();
+		testapp.Name = "WinControls test harness";
+		testapp.Price = 5.99;
+		testapp.IsTrial = false;
+		testapp.IsActive = true;
+
+		Store.TestProduct bigsword = new Store.TestProduct();
+		bigsword.ProductId = "bigsword";
+		bigsword.Name = "really big swordy!";
+		bigsword.Price = 99.99;
+
+		Store.TestProduct bigaxe = new Store.TestProduct();
+		bigaxe.ProductId = "bigaxe";
+		bigaxe.Name = "really big axe!";
+		bigaxe.Price = 65.99;
+		bigaxe.IsActive = true;
+
+		Store.EnableDebugWindowsStoreProxy (handleLicenseChanged, testapp, bigsword, bigaxe);
 	}
 
 	void trialUpgrade(object UICommand) {
@@ -30,6 +47,7 @@ public class GameObjectStart : MonoBehaviour {
 		Debug.LogError ("License changed");
 		Store.GetFullAppInfo (handleAppInfo, Debug.isDebugBuild);
 		Store.GetProductInfo ("bigsword", handleProductInfo, Debug.isDebugBuild);
+		Store.GetProductInfo ("bigaxe", handleProductInfo, Debug.isDebugBuild);
 	}
 
 	void handlePurchase(Store.PurchaseResult result) {

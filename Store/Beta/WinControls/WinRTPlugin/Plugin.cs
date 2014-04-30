@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using System.Text;
 
 #if NETFX_CORE
 using System.Threading.Tasks;
+using System.IO;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.ApplicationModel.Core;
@@ -80,6 +82,33 @@ namespace WinControls
             public string Name;
             public string Id;
             public string Price;
+        }
+
+
+        public class TestApp
+        {
+            public Guid AppId = new Guid("2B14D306-D8F8-4066-A45B-0FB3464C67F2");
+            public Uri LinkUri = new Uri("http://apps.microsoft.com/webpdp/app/2B14D306-D8F8-4066-A45B-0FB3464C67F2");
+            public string CurrentMarket = "en-US";
+            public uint AgeRating = 3;
+            public string Name = "Test App";
+            public string Description = "This is a test app";
+            public double Price = 1.99;
+            public string CurrencySymbol = "$";
+            public string CurrencyCode = "USD";
+            public bool? IsActive = false;
+            public bool? IsTrial = true;
+
+        }
+
+        public class TestProduct
+        {
+            public string ProductId = "product1";
+            public string Name = "Product 1";
+            public double Price = 0.99;
+            public string CurrencySymbol = "$";
+            public string CurrencyCode = "USD";
+            public bool? IsActive = false;
         }
 
         public enum PurchaseResult
@@ -181,12 +210,30 @@ namespace WinControls
 #endif
         }
 
-        public static void EnableDebugWindowsStoreProxy(string windowsStoreProxy)
+        public static void EnableDebugWindowsStoreProxy(TestApp testApp, params TestProduct[] testProducts)
         {
-            EnableDebugWindowsStoreProxy(windowsStoreProxy, null);
+            EnableDebugWindowsStoreProxy(null, testApp, testProducts);
         }
 
-        public static void EnableDebugWindowsStoreProxy(string windowsStoreProxy, LicenseChangedHandler licenseChangedHandler)
+        public static void EnableDebugWindowsStoreProxy(LicenseChangedHandler licenseChangedHandler, TestApp testApp, params TestProduct[] testProducts)
+        {
+#if NETFX_CORE
+            XElement proxyXML = SerializeStoreProxyToXML(testApp, testProducts);
+            using (StringWriter proxyXMLWriter = new StringWriter())
+            {
+                proxyXML.Save(proxyXMLWriter, SaveOptions.DisableFormatting);
+                EnableDebugWindowsStoreProxy(licenseChangedHandler, proxyXMLWriter.ToString());
+            }
+#endif
+        }
+
+
+        public static void EnableDebugWindowsStoreProxy(string windowsStoreProxy)
+        {
+            EnableDebugWindowsStoreProxy(null, windowsStoreProxy);
+        }
+
+        public static void EnableDebugWindowsStoreProxy(LicenseChangedHandler licenseChangedHandler, string windowsStoreProxy)
         {
 #if NETFX_CORE
             if (licenseChangedHandler != null)
@@ -196,12 +243,49 @@ namespace WinControls
             }
 
             WriteWindowsStoreProxyFileAsync(windowsStoreProxy);
-
 #endif
         }
 
 #if NETFX_CORE
         // Internal Windows-only functions
+        protected static XElement SerializeStoreProxyToXML(TestApp testApp, params TestProduct[] testProducts)
+        {
+            XElement listingInfo = new XElement("ListingInformation", new XElement("App",
+                new XElement("AppId", testApp.AppId.ToString()),
+                new XElement("LinkUri", testApp.LinkUri.ToString()),
+                new XElement("CurrentMarket", testApp.CurrentMarket),
+                new XElement("AgeRating", testApp.AgeRating),
+                new XElement("MarketData",
+                    new XAttribute(XNamespace.Xml + "lang", testApp.CurrentMarket.ToLower()),
+                    new XElement("Name", testApp.Name),
+                    new XElement("Description", testApp.Description),
+                    new XElement("Price", testApp.Price.ToString("F2")),
+                    new XElement("CurrencySymbol", testApp.CurrencySymbol),
+                    new XElement("CurrencyCode", testApp.CurrencyCode))));
+
+            XElement licenseInfo = new XElement("LicenseInformation",
+                new XElement("App",
+                  new XElement("IsActive", testApp.IsActive),
+                  new XElement("IsTrial", testApp.IsTrial)));
+
+            foreach (TestProduct testProduct in testProducts)
+            {
+                listingInfo.Add(new XElement("Product",
+                        new XAttribute("ProductId", testProduct.ProductId),
+                        new XElement("MarketData",
+                            new XAttribute(XNamespace.Xml + "lang", testApp.CurrentMarket.ToLower()),
+                            new XElement("Name", testProduct.Name),
+                            new XElement("Price", testProduct.Price.ToString("F2")),
+                            new XElement("CurrencySymbol", testProduct.CurrencySymbol),
+                            new XElement("CurrencyCode", testProduct.CurrencyCode))));
+
+                licenseInfo.Add(new XElement(new XElement("Product",
+                    new XAttribute("ProductId", testProduct.ProductId),
+                    new XElement("IsActive", testProduct.IsActive))));
+            }
+
+            return new XElement("CurrentApp", listingInfo, licenseInfo);
+        }
 
         protected async static void WriteWindowsStoreProxyFileAsync(string windowsStoreProxy)
         {
