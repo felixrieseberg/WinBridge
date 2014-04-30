@@ -11,24 +11,24 @@ public class GameObjectStart : MonoBehaviour {
 		messageBox.ShowMessageBox ("Which scenario would you like to test?", "Store plugin test", trialUpgradeButton, productPurchaseButton);
 	
 		// Initialize the Store proxy on debug builds
-		Store.TestApp testapp = new Store.TestApp();
-		testapp.Name = "WinControls test harness";
-		testapp.Price = 5.99;
-		testapp.IsTrial = false;
-		testapp.IsActive = true;
+		Store.DebugApp debugapp = new Store.DebugApp();
+		debugapp.Name = "WinControls debug harness";
+		debugapp.Price = 5.99;
+		debugapp.IsTrial = false;
+		debugapp.IsActive = true;
 
-		Store.TestProduct bigsword = new Store.TestProduct();
+		Store.DebugProduct bigsword = new Store.DebugProduct();
 		bigsword.ProductId = "bigsword";
 		bigsword.Name = "really big swordy!";
 		bigsword.Price = 99.99;
 
-		Store.TestProduct bigaxe = new Store.TestProduct();
+		Store.DebugProduct bigaxe = new Store.DebugProduct();
 		bigaxe.ProductId = "bigaxe";
 		bigaxe.Name = "really big axe!";
 		bigaxe.Price = 65.99;
 		bigaxe.IsActive = true;
 
-		Store.EnableDebugWindowsStoreProxy (handleLicenseChanged, testapp, bigsword, bigaxe);
+		Store.EnableDebugWindowsStoreProxy (handleLicenseChanged, debugapp, bigsword, bigaxe);
 	}
 
 	void trialUpgrade(object UICommand) {

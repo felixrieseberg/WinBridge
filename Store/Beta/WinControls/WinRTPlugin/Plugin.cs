@@ -85,14 +85,14 @@ namespace WinControls
         }
 
 
-        public class TestApp
+        public class DebugApp
         {
             public Guid AppId = new Guid("2B14D306-D8F8-4066-A45B-0FB3464C67F2");
             public Uri LinkUri = new Uri("http://apps.microsoft.com/webpdp/app/2B14D306-D8F8-4066-A45B-0FB3464C67F2");
             public string CurrentMarket = "en-US";
             public uint AgeRating = 3;
-            public string Name = "Test App";
-            public string Description = "This is a test app";
+            public string Name = "Debug App";
+            public string Description = "This is a debug app";
             public double Price = 1.99;
             public string CurrencySymbol = "$";
             public string CurrencyCode = "USD";
@@ -101,7 +101,7 @@ namespace WinControls
 
         }
 
-        public class TestProduct
+        public class DebugProduct
         {
             public string ProductId = "product1";
             public string Name = "Product 1";
@@ -210,15 +210,15 @@ namespace WinControls
 #endif
         }
 
-        public static void EnableDebugWindowsStoreProxy(TestApp testApp, params TestProduct[] testProducts)
+        public static void EnableDebugWindowsStoreProxy(DebugApp debugApp, params DebugProduct[] debugProducts)
         {
-            EnableDebugWindowsStoreProxy(null, testApp, testProducts);
+            EnableDebugWindowsStoreProxy(null, debugApp, debugProducts);
         }
 
-        public static void EnableDebugWindowsStoreProxy(LicenseChangedHandler licenseChangedHandler, TestApp testApp, params TestProduct[] testProducts)
+        public static void EnableDebugWindowsStoreProxy(LicenseChangedHandler licenseChangedHandler, DebugApp debugApp, params DebugProduct[] debugProducts)
         {
 #if NETFX_CORE
-            XElement proxyXML = SerializeStoreProxyToXML(testApp, testProducts);
+            XElement proxyXML = SerializeStoreProxyToXML(debugApp, debugProducts);
             using (StringWriter proxyXMLWriter = new StringWriter())
             {
                 proxyXML.Save(proxyXMLWriter, SaveOptions.DisableFormatting);
@@ -248,40 +248,40 @@ namespace WinControls
 
 #if NETFX_CORE
         // Internal Windows-only functions
-        protected static XElement SerializeStoreProxyToXML(TestApp testApp, params TestProduct[] testProducts)
+        protected static XElement SerializeStoreProxyToXML(DebugApp debugApp, params DebugProduct[] debugProducts)
         {
             XElement listingInfo = new XElement("ListingInformation", new XElement("App",
-                new XElement("AppId", testApp.AppId.ToString()),
-                new XElement("LinkUri", testApp.LinkUri.ToString()),
-                new XElement("CurrentMarket", testApp.CurrentMarket),
-                new XElement("AgeRating", testApp.AgeRating),
+                new XElement("AppId", debugApp.AppId.ToString()),
+                new XElement("LinkUri", debugApp.LinkUri.ToString()),
+                new XElement("CurrentMarket", debugApp.CurrentMarket),
+                new XElement("AgeRating", debugApp.AgeRating),
                 new XElement("MarketData",
-                    new XAttribute(XNamespace.Xml + "lang", testApp.CurrentMarket.ToLower()),
-                    new XElement("Name", testApp.Name),
-                    new XElement("Description", testApp.Description),
-                    new XElement("Price", testApp.Price.ToString("F2")),
-                    new XElement("CurrencySymbol", testApp.CurrencySymbol),
-                    new XElement("CurrencyCode", testApp.CurrencyCode))));
+                    new XAttribute(XNamespace.Xml + "lang", debugApp.CurrentMarket.ToLower()),
+                    new XElement("Name", debugApp.Name),
+                    new XElement("Description", debugApp.Description),
+                    new XElement("Price", debugApp.Price.ToString("F2")),
+                    new XElement("CurrencySymbol", debugApp.CurrencySymbol),
+                    new XElement("CurrencyCode", debugApp.CurrencyCode))));
 
             XElement licenseInfo = new XElement("LicenseInformation",
                 new XElement("App",
-                  new XElement("IsActive", testApp.IsActive),
-                  new XElement("IsTrial", testApp.IsTrial)));
+                  new XElement("IsActive", debugApp.IsActive),
+                  new XElement("IsTrial", debugApp.IsTrial)));
 
-            foreach (TestProduct testProduct in testProducts)
+            foreach (DebugProduct debugProduct in debugProducts)
             {
                 listingInfo.Add(new XElement("Product",
-                        new XAttribute("ProductId", testProduct.ProductId),
+                        new XAttribute("ProductId", debugProduct.ProductId),
                         new XElement("MarketData",
-                            new XAttribute(XNamespace.Xml + "lang", testApp.CurrentMarket.ToLower()),
-                            new XElement("Name", testProduct.Name),
-                            new XElement("Price", testProduct.Price.ToString("F2")),
-                            new XElement("CurrencySymbol", testProduct.CurrencySymbol),
-                            new XElement("CurrencyCode", testProduct.CurrencyCode))));
+                            new XAttribute(XNamespace.Xml + "lang", debugApp.CurrentMarket.ToLower()),
+                            new XElement("Name", debugProduct.Name),
+                            new XElement("Price", debugProduct.Price.ToString("F2")),
+                            new XElement("CurrencySymbol", debugProduct.CurrencySymbol),
+                            new XElement("CurrencyCode", debugProduct.CurrencyCode))));
 
                 licenseInfo.Add(new XElement(new XElement("Product",
-                    new XAttribute("ProductId", testProduct.ProductId),
-                    new XElement("IsActive", testProduct.IsActive))));
+                    new XAttribute("ProductId", debugProduct.ProductId),
+                    new XElement("IsActive", debugProduct.IsActive))));
             }
 
             return new XElement("CurrentApp", listingInfo, licenseInfo);
