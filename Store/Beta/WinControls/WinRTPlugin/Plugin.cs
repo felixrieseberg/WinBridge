@@ -13,6 +13,9 @@ using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Store;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml;
 #endif
 
 namespace WinControls
@@ -64,6 +67,46 @@ namespace WinControls
             });
 #endif
         }
+    }
+
+    public class VideoPlayback {
+
+        public static void PlayVideoFullscreen(string videoUrl)
+        {
+            PlayVideoFullscreen(videoUrl, true, false);
+        }
+        public static void PlayVideoFullscreen(string videoUrl, bool controlsEnabled)
+        {
+            PlayVideoFullscreen(videoUrl, controlsEnabled, false);
+        }
+        public static void PlayVideoFullscreen(string videoUrl, bool controlsEnabled, bool tapSkipsVideo)
+        {
+#if NETFX_CORE
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+
+                Page page = (Page)Window.Current.Content;
+                SwapChainBackgroundPanel backgroundPanel = (SwapChainBackgroundPanel)page.FindName("DXSwapChainBackgroundPanel");
+
+                MediaElement videoPlayBackElement = new MediaElement();
+
+                videoPlayBackElement.IsFullWindow = true;
+                videoPlayBackElement.Source = new Uri(videoUrl);
+                videoPlayBackElement.AreTransportControlsEnabled = controlsEnabled;
+
+                if (tapSkipsVideo)
+                {
+                    videoPlayBackElement.Tapped += delegate { backgroundPanel.Children.Remove(videoPlayBackElement); };
+                }
+                videoPlayBackElement.MediaEnded += delegate { backgroundPanel.Children.Remove(videoPlayBackElement); };
+
+                backgroundPanel.Children.Add(videoPlayBackElement);
+            
+                videoPlayBackElement.Play();
+            });
+#endif
+        }
+
     }
 
     public class Store
