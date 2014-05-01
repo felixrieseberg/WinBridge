@@ -1,14 +1,14 @@
-#WinBridge: WinRT Controls & Features for Unity3D
+##WinBridge: WinRT Controls & Features for Unity3D
 
-##About
+###About
 The Unity Windows Controls Library is a plugin for Unity3D that enables easier command of native controls and features of WinRT (the underlying library behind Windows Store, Windows Phone and Xbox One apps). 
 
 This repository is open-source and currently maintained by a small group of Microsoft developer evangelists. It should be noted that this plugin is provided as-is with no warranties given. It is released under the MS-LPL license (more information below).
 
-##Documentation
+###Documentation
 This is a to-do.
 
-##License
+###License
 Microsoft Limited Public License (Ms-LPL)
 
 This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.
