@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/cummings.michael/WinBridge"
+		}
+	],
+	"build_systems":
+	[
+	  {
+      	"name": "jekyll",
+	    "cmd": "bundle exec jekyll serve",
+	    "shell": true,
+	    "path": "/bin:/usr/bin:/usr/local/bin",
+	    "working_dir": "$project_path"
+	  }
+	]
+}
