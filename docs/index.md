@@ -2,7 +2,7 @@
 layout: docs
 title: Welcome
 next_section: quickstart
-permalink: /WinBridge/docs/home/
+permalink: /docs/home/
 ---
 
 ## So what is WinBridge, exactly?
