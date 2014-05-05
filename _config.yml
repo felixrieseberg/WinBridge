@@ -1,3 +1,6 @@
+baseurl: /WinBridge
+url: http://protossengineering.github.io
+
 relative_permalinks: false
 
 markdown:      kramdown
