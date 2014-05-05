@@ -124,6 +124,10 @@ aside#sidebar p.repo-owner a {
   font-weight: bold;
 }
 
+aside#sidebar h4:before {
+  margin-left: inherit;
+}
+
 #downloads {
   margin-bottom: 40px;
 }

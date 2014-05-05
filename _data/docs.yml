@@ -1,0 +1,24 @@
+- title: Getting Started
+  docs:
+  - home
+  - quickstart
+  - installation
+  - usage
+  - structure
+  - configuration
+
+- title: API
+  docs:
+  - api/store
+
+- title: Miscellaneous
+  docs:
+  - troubleshooting
+  - sites
+  - resources
+  - upgrading
+
+- title: Meta
+  docs:
+  - contributing
+  - history

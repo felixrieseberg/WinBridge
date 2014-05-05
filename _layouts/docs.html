@@ -1,0 +1,16 @@
+---
+layout: default
+---
+<div id="content-wrapper">
+  <div class="inner clearfix">
+    <section id="main-content">
+      <article>
+        <h1>{{ page.title }}</h1>
+        {{ content }}
+        {% include section_nav.html %}
+      </article>          
+    </section>
+    {% include docs_contents.html %}      
+  </div>
+  <div class="clear"></div>    
+</div>
