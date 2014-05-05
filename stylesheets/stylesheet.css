@@ -360,6 +360,26 @@ footer a:hover {
   color: #444;
 }
 
+/* API Doc Tables */
+span.header {
+  font-weight: bold;
+}
+span.type_column {
+  display:inline-block; 
+  vertical-align: top;
+  width:45px;
+}
+span.name_column {
+  display:inline-block; 
+  vertical-align: top;
+  width:125px;
+}
+span.description_column {
+  display:inline-block; 
+  vertical-align: top;
+  width:500px;
+}
+
 /* MISC */
 .clearfix:after {
   clear: both;

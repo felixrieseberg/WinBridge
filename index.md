@@ -1,0 +1,71 @@
+---
+layout: default
+title: Winbridge by ProtossEngineering
+---
+
+<div id="content-wrapper">
+  <div class="inner clearfix">
+    <section id="main-content">
+      <article>
+          <h1>
+            <a name="about" class="anchor" href="#about"><span class="octicon octicon-link"></span></a>About
+          </h1>
+
+          <p>The Unity Windows Controls Library is a plugin for Unity3D that enables easier command of native controls and features of WinRT (the underlying library behind Windows Store, Windows Phone and Xbox One apps). </p>
+
+          <p>This repository is open-source and currently maintained by a small group of Microsoft developer evangelists. It should be noted that this plugin is provided as-is with no warranties given. It is released under the MS-LPL license (more information below).</p>
+
+          <h1>
+            <a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation
+          </h1>
+
+          <p><a href="{{site.github.url}}/docs/home">Visit the documentation site.</a></p>
+
+          <h1>
+            <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License
+          </h1>
+
+          <p>Microsoft Limited Public License (Ms-LPL)</p>
+
+          <p>This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.</p>
+
+          <ol>
+          <li>Definitions</li>
+          </ol><p>The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under U.S. copyright law. A "contribution" is the original software, or any additions or changes to the software. A "contributor" is any person that distributes its contribution under this license. "Licensed patents" are a contributor's patent claims that read directly on its contribution.</p>
+
+          <ol>
+          <li>Grant of Rights</li>
+          </ol><p>(A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.
+          (B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.</p>
+
+          <ol>
+          <li>Conditions and Limitations</li>
+          </ol><p>(A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks. 
+          (B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically. 
+          (C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software. 
+          (D) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license. 
+          (E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees, or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.</p>
+
+          <ol>
+          <li>(F) Platform Limitation- The licenses granted in sections 2(A) &amp; 2(B) extend only to the software or derivative works that you create that run on a Microsoft Windows operating system product.</li>
+          </ol>
+
+      </article>          
+    </section>
+    <aside id="sidebar">
+      <a href="https://github.com/ProtossEngineering/WinBridge/zipball/master" class="button">
+        <small>Download</small>
+        .zip file
+      </a>
+      <a href="https://github.com/ProtossEngineering/WinBridge/tarball/master" class="button">
+        <small>Download</small>
+        .tar.gz file
+      </a>
+
+      <p class="repo-owner"><a href="https://github.com/ProtossEngineering/WinBridge"></a> is maintained by <a href="https://github.com/ProtossEngineering">ProtossEngineering</a>.</p>
+
+      <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+    </aside>
+
+  </div>
+</div>
