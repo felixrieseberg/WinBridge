@@ -15,7 +15,6 @@ Defines methods and properties you can use to get license and listing info about
     of each method.
 
 ## Methods 
-
 <span class="header type_column"></span><span class="header name_column">Name</span><span class="header description_column">Description</span><br>
 <span class="type_column">static</span><span class="name_column">[PurchaseFullApp][]</span><span class="description_column">Activates the UI operation to enable the user to buy a full license for the current app.</span><br>
 <span class="type_column">static</span><span class="name_column">[IsFullAppActive][]</span><span class="description_column">Gets the value that indicates whether the license is active.</span><br>
