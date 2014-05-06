@@ -1,33 +1,1 @@
-##WinBridge: WinRT Controls & Features for Unity3D
-
-###About
-The Unity Windows Controls Library is a plugin for Unity3D that enables easier command of native controls and features of WinRT (the underlying library behind Windows Store, Windows Phone and Xbox One apps). 
-
-This repository is open-source and currently maintained by a small group of Microsoft developer evangelists. It should be noted that this plugin is provided as-is with no warranties given. It is released under the MS-LPL license (more information below).
-
-###Documentation
-This is a to-do.
-
-###License
-Microsoft Limited Public License (Ms-LPL)
-
-This license governs use of the accompanying software. If you use the software, you accept this license. If you do not accept the license, do not use the software.
-
-1. Definitions
-
-The terms "reproduce," "reproduction," "derivative works," and "distribution" have the same meaning here as under U.S. copyright law. A "contribution" is the original software, or any additions or changes to the software. A "contributor" is any person that distributes its contribution under this license. "Licensed patents" are a contributor's patent claims that read directly on its contribution.
-
-2. Grant of Rights
-
-(A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.
-(B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.
-
-3. Conditions and Limitations
-
-(A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks. 
-(B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically. 
-(C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software. 
-(D) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license. 
-(E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees, or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.
-
-4. (F) Platform Limitation- The licenses granted in sections 2(A) & 2(B) extend only to the software or derivative works that you create that run on a Microsoft Windows operating system product.
+##WinBridge: WinRT Controls & Features for Unity3DThe WinBridge is a plugin for Unity3D that enables easier command of native controls and features of WinRT (the underlying library behind Windows Store, Windows Phone and Xbox One apps). Currently implemented:- Windows Store (In-App-Purchases, Trial Upgrade, Reciept management)- Native Message Dialogs- Native Video Playback## InstallationCopy the contents of the folder _CopyContentsToUnityAssets_ into your Unity project.##Usage### Play Fullscreen Video```public static void PlayVideoFullscreen(string videoUrl, bool controlsEnabled, bool tapSkipsVideo)```- videoUrl: The URL to the video as a string, including official qualifier (for instance ms-appx:/// for an asset inside the app package or http:// for a web resource). _Note: If the video should ship with the app package, it is best placed inside the appx package using Visual Studio_.- controlsEnabled (default: _true_): _true_ enables the native video controls (scrubber, play/pause, etc.), _false_ disables them. - tapSkipsVideo (default: _false_): _true_ automatically removes the video element if the user taps/clicks it, _false_ doesn't. If controlsEnabled is set to _true_ and tapSkipsVideo is set to _false_, a tap/click will pause the video.### Windows StoreTBD### Message BoxTBD##LicenseThis repository is open-source and currently maintained by a small group of Microsoft developer evangelists. It should be noted that this plugin is provided as-is with no warranties given. It is released under the MS-LPL license. For details, please see the attached license.md (MS-LPL) or http://clrinterop.codeplex.com/license.
