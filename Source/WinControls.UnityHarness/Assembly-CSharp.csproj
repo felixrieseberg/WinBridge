@@ -47,13 +47,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\GameObjectStart.cs" />
+     <Compile Include="Assets\WinBridge\WBMessageDialog.cs" />
+     <Compile Include="Assets\WinBridge\WinBridge.cs" />
+     <Compile Include="Assets\WinBridge\WindowsStoreProxy.cs" />
  <Reference Include="WinControls">
  <HintPath>Assets\Plugins\WinControls.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{ED81A5D3-B626-1DD9-E153-BA47082B4D93}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
