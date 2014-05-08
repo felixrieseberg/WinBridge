@@ -4,15 +4,18 @@ using WinControls;
 using System;
 using System.Collections.Generic;
 
-[ExecuteInEditMode]
+
 [AddComponentMenu("WinBridge/Windows Store Proxy")]
 
-[System.Serializable]
+[ExecuteInEditMode]
 public class WindowsStoreProxy : MonoBehaviour
 {
-
     private Store.DebugApp _debugApp;
-    public List<Store.DebugProduct> debugProducts = new List<Store.DebugProduct>();
+
+    // This field can't be serialized :(
+    private List<Store.DebugProduct> processedDebugProducts = new List<Store.DebugProduct>();
+    [SerializeField]
+    public List<SerializableDebugProduct> debugProducts = new List<SerializableDebugProduct>();
 
     // GUID
     public string appId;
@@ -28,6 +31,19 @@ public class WindowsStoreProxy : MonoBehaviour
     public bool dIsActive = true;
     public bool isTrial = true;
 
+    private static WindowsStoreProxy instance;
+    private static GameObject container;
+    public static WindowsStoreProxy GetInstance()
+    {
+        if (!instance)
+        {
+            container = new GameObject();
+            container.name = "WindowsStoreProxy";
+            instance = container.AddComponent(typeof(WindowsStoreProxy)) as WindowsStoreProxy;
+        }
+        return instance;
+    }
+
 	void Awake () {
         _debugApp = new Store.DebugApp();
 
@@ -42,19 +58,59 @@ public class WindowsStoreProxy : MonoBehaviour
         _debugApp.IsActive = dIsActive;
         _debugApp.IsTrial = isTrial;
 
-        Store.EnableDebugWindowsStoreProxy(_debugApp, debugProducts.ToArray());
+        foreach (SerializableDebugProduct preProduct in debugProducts)
+        {
+            WinControls.Store.DebugProduct debugProduct = new WinControls.Store.DebugProduct();
+            debugProduct.CurrencyCode = preProduct.currencyCode;
+            debugProduct.CurrencySymbol = preProduct.currencySymbol;
+            debugProduct.IsActive = preProduct.disActive;
+            debugProduct.Name = preProduct.productName;
+            debugProduct.Price = preProduct.price;
+            debugProduct.ProductId = preProduct.productId;
+
+            processedDebugProducts.Add(debugProduct);
+        }
+
+        Store.EnableDebugWindowsStoreProxy(_debugApp, processedDebugProducts.ToArray());
 	}
 
+    [Serializable]
+    public class SerializableDebugProduct {
+
+        public string productId;
+        public string productName;
+        public double price;
+        public string currencySymbol;
+        public string currencyCode;
+        public bool disActive;
+
+        public SerializableDebugProduct() { }
+
+        public SerializableDebugProduct(string productId, string productName, double price, string currencySymbol, string currencyCode, bool isActive)
+        {
+            this.productId = productId;
+            this.productName = productName;
+            this.price = price;
+            this.currencyCode = currencyCode;
+            this.currencySymbol = currencySymbol;
+            this.disActive = isActive;
+        }
+    }
+
+    /// <summary>
+    /// Add a debug product.
+    /// </summary>
     public void AddDebugProduct(string productId, string productName, double? price, string currencySymbol, string currencyCode, bool? isActive)
     {
-        Store.DebugProduct _thisProduct = new Store.DebugProduct();
+        Debug.Log("Added product");
+        SerializableDebugProduct _thisProduct = new SerializableDebugProduct();
 
-        if (!string.IsNullOrEmpty(productId)) { _thisProduct.ProductId = productId; };
-        if (!string.IsNullOrEmpty(productName)) { _thisProduct.Name = productName; };
-        if (price != null) { _thisProduct.Price = Convert.ToDouble(price); };
-        if (!string.IsNullOrEmpty(currencySymbol)) { _thisProduct.CurrencySymbol = currencySymbol; };
-        if (!string.IsNullOrEmpty(currencyCode)) { _thisProduct.CurrencyCode = currencyCode; };
-        if (isActive != null) { _thisProduct.IsActive = isActive; };
+        if (!string.IsNullOrEmpty(productId)) { _thisProduct.productId = productId; };
+        if (!string.IsNullOrEmpty(productName)) { _thisProduct.productName = productName; };
+        if (price != null) { _thisProduct.price = Convert.ToDouble(price); };
+        if (!string.IsNullOrEmpty(currencySymbol)) { _thisProduct.currencySymbol = currencySymbol; };
+        if (!string.IsNullOrEmpty(currencyCode)) { _thisProduct.currencyCode = currencyCode; };
+        if (isActive != null) { _thisProduct.disActive = Convert.ToBoolean(isActive); };
 
         debugProducts.Add(_thisProduct);
     }

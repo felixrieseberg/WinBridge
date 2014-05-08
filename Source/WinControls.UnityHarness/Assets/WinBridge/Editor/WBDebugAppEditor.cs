@@ -10,7 +10,8 @@ using System;
 public class WBDebugAppEditor : Editor
 {
 
-    private List<bool> _debugProductsFoldoutBools = new List<bool>();
+    [SerializeField]
+    private static List<bool> _debugProductsFoldoutBools = new List<bool>();
 
     public override void OnInspectorGUI()
     {
@@ -47,22 +48,25 @@ public class WBDebugAppEditor : Editor
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Products Available in Debug", EditorStyles.boldLabel);
-        if (mbTarget.debugProducts.ToArray().Length > 0)
+        if (mbTarget.debugProducts.Count > 0)
         {
             EditorGUILayout.BeginVertical();
             int i = 0;
-            foreach (Store.DebugProduct product in mbTarget.debugProducts)
+            foreach (WindowsStoreProxy.SerializableDebugProduct product in mbTarget.debugProducts)
             {
-                _debugProductsFoldoutBools[i] = EditorGUILayout.Foldout(_debugProductsFoldoutBools[i], product.Name);
+                // Debug.Log("Count DebugProducts: " + mbTarget.debugProducts.Count + " i: " + i + " Count Bools: " + _debugProductsFoldoutBools.Count);
+                if (i >= _debugProductsFoldoutBools.Count) { _debugProductsFoldoutBools.Add(true); };                
+                _debugProductsFoldoutBools[i] = EditorGUILayout.Foldout(_debugProductsFoldoutBools[i], product.productName);
                 if (_debugProductsFoldoutBools[i])
                 {
-                    product.Name = EditorGUILayout.TextField("Name", product.Name);
-                    product.ProductId = EditorGUILayout.TextField("ID", product.ProductId);
+                    product.productName = EditorGUILayout.TextField("Name", product.productName);
+                    product.productId = EditorGUILayout.TextField("ID", product.productId);
                     EditorGUILayout.Space();
-                    product.IsActive = EditorGUILayout.ToggleLeft("Active", Convert.ToBoolean(product.IsActive));
+                    product.disActive = EditorGUILayout.ToggleLeft("Active", Convert.ToBoolean(product.disActive));
                     EditorGUILayout.Space();
-                    product.CurrencySymbol = EditorGUILayout.TextField("Currency Symbol", product.CurrencySymbol);
-                    product.CurrencyCode = EditorGUILayout.TextField("Currency Code", product.CurrencyCode);
+                    product.price = EditorGUILayout.FloatField("Price", (float)product.price);
+                    product.currencySymbol = EditorGUILayout.TextField("Currency Symbol", product.currencySymbol);
+                    product.currencyCode = EditorGUILayout.TextField("Currency Code", product.currencyCode);
                 }
                 i++;
             }
@@ -73,11 +77,16 @@ public class WBDebugAppEditor : Editor
 
         }
 
-
         if (GUILayout.Button("Add Debug Product"))
         {
             _debugProductsFoldoutBools.Add(true);
             mbTarget.AddDebugProduct("", "", 1.99, "$", "USD", false);
+        }
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Delete Debug Products"))
+        {
+            _debugProductsFoldoutBools.Clear();
+            mbTarget.debugProducts.Clear();
         }
     }
 

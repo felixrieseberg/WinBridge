@@ -127,7 +127,6 @@ namespace WinControls
             public string Price;
         }
 
-
         public class DebugApp
         {
             public Guid AppId = new Guid("2B14D306-D8F8-4066-A45B-0FB3464C67F2");
