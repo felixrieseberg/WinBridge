@@ -25,16 +25,16 @@ public class WBMessageBoxEditor : Editor
         foldCommand1 = EditorGUILayout.Foldout(foldCommand1, "1st Command");
         if (foldCommand1)
         {
-            messageBoxTarget.firstCommandLabel = EditorGUILayout.TextField("Label", "");
+			messageBoxTarget.firstCommandLabel = EditorGUILayout.TextField("Label", messageBoxTarget.firstCommandLabel);
             messageBoxTarget.firstCommandReceivingObject = (GameObject)EditorGUILayout.ObjectField("Reciever", messageBoxTarget.firstCommandReceivingObject, typeof(GameObject), true);
-            messageBoxTarget.firstCommandMethod = EditorGUILayout.TextField("Method to call", "");
+			messageBoxTarget.firstCommandMethod = EditorGUILayout.TextField("Method to call", messageBoxTarget.firstCommandMethod);
         }
         foldCommand2 = EditorGUILayout.Foldout(foldCommand2, "2nd Command");
         if (foldCommand2)
         {
-            messageBoxTarget.secondCommandLabel = EditorGUILayout.TextField("Label", "");
+			messageBoxTarget.secondCommandLabel = EditorGUILayout.TextField("Label", messageBoxTarget.secondCommandLabel);
             messageBoxTarget.secondCommandRecievingObject = (GameObject)EditorGUILayout.ObjectField("Reciever", messageBoxTarget.secondCommandRecievingObject, typeof(GameObject), true);
-            messageBoxTarget.secondCommandMethod = EditorGUILayout.TextField("Method to call", "");
+			messageBoxTarget.secondCommandMethod = EditorGUILayout.TextField("Method to call", messageBoxTarget.secondCommandMethod);
         }
 
         usageFold = EditorGUILayout.Foldout(usageFold, "Usage Info");
