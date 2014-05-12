@@ -16,8 +16,8 @@ public class WBMessageBoxEditor : Editor
         WBMessageDialog messageBoxTarget = (WBMessageDialog)target;
 
         EditorGUILayout.Space();
-        messageBoxTarget.title = EditorGUILayout.TextField("Title", "");
-        messageBoxTarget.label = EditorGUILayout.TextField("Message", "");
+        messageBoxTarget.title = EditorGUILayout.TextField("Title", messageBoxTarget.title);
+        messageBoxTarget.label = EditorGUILayout.TextField("Message", messageBoxTarget.label);
         EditorGUILayout.Space();
 
         EditorGUILayout.HelpBox("Using Commands is optional, but allows you to specify callback methods and labels for the buttons. You can specify none, only the 1st or both commands.", MessageType.Info);
