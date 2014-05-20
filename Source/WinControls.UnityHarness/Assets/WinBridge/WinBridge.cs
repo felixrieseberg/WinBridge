@@ -28,8 +28,8 @@ public class WinBridge : MonoBehaviour {
         public static void PlayVideo(string videoUrl, bool controlsEnabled, bool tapSkipsVideo)
         {
             #if NETFX_CORE || UNITY_WINRT
-            Debug.Log("Playing video via native WinRT control. Url: " + videoUrl + "; Controls Enabled: " + controlsEnabled + "; Tap Skips Video: " + tapSkipsVideo); 
-            WinControls.VideoPlayback.PlayVideoFullscreen(videoUrl, conctrolsEnabled, tapSkipsVideo);
+            Debug.Log("Playing video via native WinRT control. Url: " + videoUrl + "; Controls Enabled: " + controlsEnabled + "; Tap Skips Video: " + tapSkipsVideo);
+            WinControls.VideoPlayback.PlayVideoFullscreen(videoUrl, controlsEnabled, tapSkipsVideo);
             #else
             Debug.Log("Skipping native WinRT video playback - not running on WinRT"); 
             #endif
@@ -127,7 +127,7 @@ public class WinBridge : MonoBehaviour {
         /// <param name="label">The label of the message box</param>
         public static void RequestReview(string label)
         {
-            RequestReview(label, "Rate & Review", "Not now");
+            RequestReview(label, "Rate and Review", "Not now");
         }
 
         /// <summary>

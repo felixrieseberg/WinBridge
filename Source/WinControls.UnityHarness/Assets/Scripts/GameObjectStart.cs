@@ -4,7 +4,12 @@ using WinControls;
 
 public class GameObjectStart : MonoBehaviour {
 
-	void Start () {
+    void Start()
+    {
+        reviewApp();
+    }
+
+	void Startt () {
 		var messageBox = new MessageBox ();
 		var trialUpgradeButton = new MessageBox.Command ("Trial Upgrade", trialUpgrade);
 		var productPurchaseButton = new MessageBox.Command ("In app purchase", productPurchase);
@@ -65,6 +70,11 @@ public class GameObjectStart : MonoBehaviour {
 		Debug.LogError ("Product price " +  info.Price);
 		Debug.LogError ("Is " + info.Name + " product active? " + Store.IsProductActive (info.Id, Debug.isDebugBuild));
 	}
+
+    void reviewApp()
+    {
+        WinBridge.Store.RequestReview();
+    }
 
 	// Update is called once per frame
 	void Update () {

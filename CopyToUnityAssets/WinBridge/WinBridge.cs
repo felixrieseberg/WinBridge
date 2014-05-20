@@ -29,7 +29,7 @@ public class WinBridge : MonoBehaviour {
         {
             #if NETFX_CORE || UNITY_WINRT
             Debug.Log("Playing video via native WinRT control. Url: " + videoUrl + "; Controls Enabled: " + controlsEnabled + "; Tap Skips Video: " + tapSkipsVideo); 
-            WinControls.VideoPlayback.PlayVideoFullscreen(videoUrl, conctrolsEnabled, tapSkipsVideo);
+            WinControls.VideoPlayback.PlayVideoFullscreen(videoUrl, controlsEnabled, tapSkipsVideo);
             #else
             Debug.Log("Skipping native WinRT video playback - not running on WinRT"); 
             #endif
@@ -111,6 +111,34 @@ public class WinBridge : MonoBehaviour {
         public static void GetProductInfo(string productId, WinControls.Store.ProductInfoHandler handler)
         {
             WinControls.Store.GetProductInfo(productId, handler, Debug.isDebugBuild);
+        }
+
+        /// <summary>
+        /// Opens up a message dialog that opens up the Windows Store review page for the current app if the user confirms.
+        /// </summary>
+        public static void RequestReview()
+        {
+            RequestReview("Would you like to rate and review this app?", "Rate & Review", "Not now");
+        }
+
+        /// <summary>
+        /// Opens up a message dialog that opens up the Windows Store review page for the current app if the user confirms.
+        /// </summary>
+        /// <param name="label">The label of the message box</param>
+        public static void RequestReview(string label)
+        {
+            RequestReview(label, "Rate and Review", "Not now");
+        }
+
+        /// <summary>
+        /// Opens up a message dialog that opens up the Windows Store review page for the current app if the user confirms.
+        /// </summary>
+        /// <param name="label">The label of the message box</param>
+        /// <param name="okLabel">The label of the OK button</param>
+        /// <param name="cancelLabel">Th label of the cancel button</param>
+        public static void RequestReview(string label, string okLabel, string cancelLabel)
+        {
+            WinControls.Store.RequestRating(label, okLabel, cancelLabel);
         }
 
     }
