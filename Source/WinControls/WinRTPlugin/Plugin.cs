@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.ApplicationModel;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Store;
 using Windows.Storage;
@@ -166,6 +167,31 @@ namespace WinControls
         public delegate void FullAppInfoHandler(FullAppInfo result);
         public delegate void ProductInfoHandler(ProductInfo result);
         public delegate void LicenseChangedHandler();
+
+        public static void RequestRating(string label, string okLabel, string cancelLabel)
+        {
+#if NETFX_CORE
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                MessageDialog msg;
+                msg = new MessageDialog(label);
+                msg.Commands.Add(new UICommand(okLabel, (uiCommand) =>
+                {
+                    String appId = Windows.ApplicationModel.Store.CurrentApp.AppId.ToString();
+                    Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store:REVIEW?PFN=" + appId));
+                }));
+                msg.Commands.Add(new UICommand(cancelLabel, (uiCommand) =>
+                {
+                    // No rating, alright
+                }));
+                msg.DefaultCommandIndex = 0;
+                msg.CancelCommandIndex = 1;
+
+                msg.ShowAsync();
+            });
+
+#endif
+        }
 
         public static void PurchaseFullApp(PurchaseResultHandler purchaseCallback)
         {
