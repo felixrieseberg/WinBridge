@@ -44,6 +44,15 @@ WinBridge.GetProductInfo(string productId, WinControls.Store.ProductInfoHandler 
 - productId: The id of the product. 
 - handler: The method that is used as a callback. 
 
+####Requesting a review of the app
+```
+WinBridge.RequestReview(string label, string okLabel, string cancelLabel)
+```
+- label: The label of the message box (default: "Would you like to rate and review this app?")
+- okLabel: The label of the OK button (default: "Rate and Review")
+- cancelLabel: The label of the cancel button (default: "Not now)
+
+
 ### Windows Store Proxy
 A Windows Store Proxy can be attached to any GameObject with _Add Component - WinBridge - Windows Store Proxy_. The inspector editor is fairly self-explanatory - for questions around the purpose of individual fields, please consult the official [Windows Store documentation on MSDN ](http://msdn.microsoft.com/en-us/library/windows/apps/windows.applicationmodel.store.currentappsimulator).
 
