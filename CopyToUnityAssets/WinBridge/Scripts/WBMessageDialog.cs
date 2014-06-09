@@ -26,11 +26,6 @@ public class WBMessageDialog : MonoBehaviour {
     private MessageBox.Command _command1 = null;
     private MessageBox.Command _command2 = null;
 
-    void Awake()
-    {
-        _messageBox = new WinControls.MessageBox();
-    }
-
 	void SetupCommands () {
         if (firstCommandMethod != null && firstCommandReceivingObject != null)
         {
@@ -52,7 +47,9 @@ public class WBMessageDialog : MonoBehaviour {
 
     public void Show()
     {
-        SetupCommands();
+		_messageBox = new WinControls.MessageBox();
+
+         SetupCommands();
 
         if (_command1 != null && _command2 != null)
         {
@@ -60,11 +57,11 @@ public class WBMessageDialog : MonoBehaviour {
         }
         else if (_command1 != null && _command2 == null)
         {
-            _messageBox.ShowMessageBox(label, title, _command1);
+            _messageBox.ShowMessageBox(label, title, _command1, null);
         }
         else if (_command1 == null && _command2 == null)
         {
-            _messageBox.ShowMessageBox(label);
+            _messageBox.ShowMessageBox(label, title, null, null);
         }
         #if NETFX_CORE
         Debug.Log("WinBridge: Showing native WinRT MessageDialog");
@@ -84,4 +81,3 @@ public class WBMessageDialog : MonoBehaviour {
     }
 
 }
- 
