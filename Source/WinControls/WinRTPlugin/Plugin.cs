@@ -200,8 +200,10 @@ namespace WinControls
         public static void PurchaseFullApp(PurchaseResultHandler purchaseCallback, bool isDebug)
         {
 #if NETFX_CORE
-
-            PurchaseFullAppAsync(purchaseCallback, isDebug);
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                PurchaseFullAppAsync(purchaseCallback, isDebug);
+            });
 #endif
         }
 
@@ -246,7 +248,10 @@ namespace WinControls
         public static void PurchaseProduct(string productName, PurchaseResultHandler purchaseCallback, bool isDebug)
         {
 #if NETFX_CORE
-            PurchaseProductAsync(productName, purchaseCallback, isDebug);
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                PurchaseProductAsync(productName, purchaseCallback, isDebug);
+            });
 #endif
         }
 

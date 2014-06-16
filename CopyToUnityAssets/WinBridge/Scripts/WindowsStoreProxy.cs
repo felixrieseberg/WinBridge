@@ -72,6 +72,8 @@ public class WindowsStoreProxy : MonoBehaviour
         }
 
         Store.EnableDebugWindowsStoreProxy(_debugApp, processedDebugProducts.ToArray());
+		Debug.Log("Windows Store Proxy: Adding products: " + processedDebugProducts.ToArray().Length);
+
 	}
 
     [Serializable]
