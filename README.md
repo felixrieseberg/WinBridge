@@ -11,7 +11,7 @@ Copy the contents of the folder _CopyContentsToUnityAssets_ into your Unity proj
 ##Usage
 
 ### Windows Store
-This class manages full interaction with the Windows Store. To enable the functionality of all these methods during debug mode, please see the next point (Windows Store Proxy).
+This class manages full interaction with the Windows Store. To enable the functionality of all these methods during debug mode, please see the next point (Windows Store Proxy). Please note that most of these functions do result in an error if the app hasn't been published yet and debug settings aren't set properly.
 
 ####Purchasing full version of the app
 ```
