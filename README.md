@@ -73,4 +73,4 @@ WinBridge.VideoPlayback.PlayVideoFullscreen(string videoUrl, bool controlsEnable
 - tapSkipsVideo (default: _false_): _true_ automatically removes the video element if the user taps/clicks it, _false_ doesn't. If controlsEnabled is set to _true_ and tapSkipsVideo is set to _false_, a tap/click will pause the video.
 
 ##License
-This repository is open-source and currently maintained by a small group of Microsoft developer evangelists. It should be noted that this plugin is provided as-is with no warranties given. It is released under the MS-LPL license. For details, please see the attached license.md (MS-LPL) or http://clrinterop.codeplex.com/license.
+This repository is open-source and currently maintained by a small group of Microsoft developer evangelists. It should be noted that this plugin is provided as-is with no warranties given. Feel free to change code. It is released under the MS-LPL license. For details, please see the attached license.md (MS-LPL) or http://clrinterop.codeplex.com/license.
